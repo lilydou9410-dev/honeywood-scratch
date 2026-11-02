@@ -1,0 +1,3 @@
+import {defineConfig,loadEnv} from 'vite';
+import {makeHandler} from './netlify/functions/api.mjs';
+export default defineConfig(({mode})=>({server:{allowedHosts:['terminal.local']},plugins:[{name:'netlify-api-development',configureServer(server){const handler=makeHandler({...process.env,...loadEnv(mode,process.cwd(),'')});server.middlewares.use('/api',async(req,res)=>{let body='';for await(const chunk of req){body+=chunk;if(body.length>8192){res.statusCode=413;res.end();return}}const result=await handler({path:'/api'+req.url.split('?')[0],httpMethod:req.method,headers:{...req.headers,'x-nf-client-connection-ip':req.socket.remoteAddress},body});res.writeHead(result.statusCode,result.headers);res.end(result.body);});}}]}));
