@@ -1,6 +1,6 @@
 
 window.HONEYWOOD_CONFIG = {
-  lineChannelId: "",
+  lineChannelId: "2012322695",
   supabaseUrl: "",
   supabaseAnonKey: ""
 };
